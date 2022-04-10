@@ -55,14 +55,27 @@ class _BiddingPageState extends State<BiddingPage> {
 
   @override
   void initState(){
-    Future.delayed(
-        Duration(seconds: 1))
-        .then((value) => _displayTextInputDialog())
-        .then((bool? value) {
-          if (value ?? false) {
-            connectSocket().then((value) => getHistory());
-          }
-        });
+
+    DateTime _d = DateTime.fromMillisecondsSinceEpoch(widget.product.endTime);
+    Duration _df = _d.difference(DateTime.now());
+
+    if (_df.isNegative) {
+      Future.delayed(Duration(milliseconds: 500)).then((value) => _showAlert('TimeUp !!!', () {
+        Navigator.of(context).pop();
+      }));
+    } else {
+      Future.delayed(
+          Duration(seconds: 1))
+          .then((value) => _displayTextInputDialog())
+          .then((bool? value) {
+        if (value ?? false) {
+          connectSocket().then((value) => getHistory());
+        }
+      });
+    }
+
+
+
     super.initState();
   }
 
@@ -81,7 +94,10 @@ class _BiddingPageState extends State<BiddingPage> {
         _bidPrice = mapList[0].price!;
       });
     } catch(e) {
-      print(e);
+      setState(() {
+        _bidPrice = 1000;
+        _bid = 0;
+      });
     }
   }
 
@@ -111,15 +127,20 @@ class _BiddingPageState extends State<BiddingPage> {
   Future addBidding() async {
      try {
        await _dio.post('http://localhost:8999/bidding', data: {'id': widget.product.id, 'bidder': _name, "price": _bidPrice + _bid });
+       setState(() {
+         _bid = 0;
+       });
      } catch(e) {
-
+        _showAlert('Price must not less or equal', () {
+          Navigator.of(context).pop();
+        });
      }
   }
 
   @override
   Widget build(BuildContext context) {
 
-    String endTimeDate = Jiffy(DateTime.fromMillisecondsSinceEpoch(widget.product.endTime)).format("dd MMM yyy hh:mm:ss");
+    String endTimeDate = Jiffy(DateTime.fromMillisecondsSinceEpoch(widget.product.endTime)).format("dd MMM yyy hh:mm:ss a");
 
     DateTime _d = DateTime.fromMillisecondsSinceEpoch(widget.product.endTime);
     DateTime _now = DateTime.now().toLocal();
@@ -166,7 +187,7 @@ class _BiddingPageState extends State<BiddingPage> {
                       SizedBox(width: 8,),
                       Container(height: 16, width: 1, color: Styles.colorTextSecondary,),
                       SizedBox(width: 8,),
-                      Text('ปิดประมูล ${endTimeDate}', style: Styles.light.copyWith(fontSize: 12, color: Styles.colorTextSecondary),)
+                      Text('ปิดประมูล $endTimeDate', style: Styles.light.copyWith(fontSize: 12, color: Styles.colorTextSecondary),)
                     ],
                   ),
                   SizedBox(height: 16,),
@@ -179,6 +200,11 @@ class _BiddingPageState extends State<BiddingPage> {
                       duration: _diff,
                       builder: (BuildContext context, Duration d) {
                         return Text('${d.inDays} วัน : ${d.inHours} : ${d.inMinutes} : ${d.inSeconds % 60}', style: Styles.bold.copyWith(fontSize: 28),);
+                      },
+                      onFinish: () {
+                        _showAlert('Time Up !!!', () {
+                          Navigator.of(context).pop();
+                        });
                       },
                     ),
                   ),
@@ -347,6 +373,26 @@ class _BiddingPageState extends State<BiddingPage> {
                   if (_name != null && _name.isNotEmpty) {
                     Navigator.pop(context, true);
                   }
+                },
+              ),
+            ],
+          );
+        });
+  }
+
+  Future _showAlert(String title, Function onTap) async {
+    showDialog(
+        barrierDismissible: false,
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: Text(title),
+            actions: <Widget>[
+              ElevatedButton(
+                child:  Text('OK'),
+                onPressed: () {
+                  Navigator.pop(context);
+                  onTap();
                 },
               ),
             ],

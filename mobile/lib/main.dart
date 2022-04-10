@@ -99,7 +99,9 @@ class _MyHomePageState extends State<MyHomePage> {
                 itemBuilder: (_, int index) {
                   return GestureDetector(
                     onTap: () {
-                      Navigator.of(context, rootNavigator: true).push(MaterialPageRoute(builder: (_) => BiddingPage(product: _product[index])));
+                      Navigator.of(context, rootNavigator: true)
+                          .push(MaterialPageRoute(builder: (_) => BiddingPage(product: _product[index])))
+                          .then((value) => getProduct());
                     },
                     child: Container(
                       margin: EdgeInsets.only(bottom: 8),

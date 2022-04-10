@@ -2,4 +2,4 @@
 
 source ./node_modules/.bin/tsc
 
-source ./dist/server/server.js
+source node ./dist/server/server.js

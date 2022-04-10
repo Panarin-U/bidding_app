@@ -4,7 +4,9 @@ const currentDate = new Date()
 
 const HOUR = 1;
 
-const lastestHour = currentDate.setTime(currentDate.getTime() + (HOUR * 60 * 60 * 1000 ))
+const nextHour = currentDate.setTime(currentDate.getTime() + (HOUR * 60 * 60 * 1000 ))
+const nextDay = (new Date()).setTime(new Date().getTime() + (1 * 24 * 60 * 60 * 1000 ))
+const nextMin = (new Date()).setTime(new Date().getTime() + (60 * 1000 ))
 
 export type Product = {
     id: number,
@@ -29,37 +31,37 @@ export const initialData: Product[] = [
         id: 0,
         name: 'Iphone 8 64 Model:ZA/A สีขาว ประกันศูนย์ 6/11/2022',
         biddingPrice: 1000,
-        endTime: lastestHour
+        endTime: nextHour
     },
     {
         id: 1,
         name: 'Iphone X 64 Model:ZA/A สีขาว ประกันศูนย์ 6/11/2022',
         biddingPrice: 1000,
-        endTime: lastestHour
+        endTime: nextHour
     },
     {
         id: 2,
         name: 'Iphone XS 64 Model:ZA/A สีขาว ประกันศูนย์ 6/11/2022',
         biddingPrice: 1000,
-        endTime: lastestHour
+        endTime: nextHour
     },
     {
         id: 3,
         name: 'Iphone XR 64 Model:ZA/A สีขาว ประกันศูนย์ 6/11/2022',
         biddingPrice: 1000,
-        endTime: lastestHour
+        endTime: nextMin
     },
     {
         id: 4,
         name: 'Iphone 11 64 Model:ZA/A สีขาว ประกันศูนย์ 6/11/2022',
         biddingPrice: 1000,
-        endTime: lastestHour
+        endTime: nextHour
     },
     {
         id: 5,
         name: 'Iphone 12 64 Model:ZA/A สีขาว ประกันศูนย์ 6/11/2022',
         biddingPrice: 1000,
-        endTime: lastestHour
+        endTime: nextDay
     }
 ]
 
