@@ -5,8 +5,8 @@ const currentDate = new Date()
 const HOUR = 1;
 
 const nextHour = currentDate.setTime(currentDate.getTime() + (HOUR * 60 * 60 * 1000 ))
-const nextDay = (new Date()).setTime(new Date().getTime() + (1 * 24 * 60 * 60 * 1000 ))
-const nextMin = (new Date()).setTime(new Date().getTime() + (60 * 1000 ))
+const nextDay = (new Date()).setDate(new Date().getDate() + 2)
+const nextMin = (new Date()).setTime(new Date().getTime() + (60 * 1000))
 
 export type Product = {
     id: number,

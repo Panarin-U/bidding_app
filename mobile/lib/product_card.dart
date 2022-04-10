@@ -16,8 +16,8 @@ class ProductCard extends StatelessWidget {
     DateTime _d = DateTime.fromMillisecondsSinceEpoch(product.endTime);
     DateTime _now = DateTime.now().toLocal();
     Duration _diff = _d.difference(_now);
-
-    return '${_diff.inDays} วัน : ${_diff.inHours} : ${_diff.inMinutes} : ${_diff.inSeconds % 60}';
+    print(_diff.inDays * 24);
+    return '${_diff.inDays} วัน : ${_diff.inHours - (_diff.inDays * 24)} : ${_diff.inMinutes % 60} : ${_diff.inSeconds % 60}';
   }
 
   @override
